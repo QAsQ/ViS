@@ -9,7 +9,7 @@ namespace ViS
     class Node
     {
         public int[] son = new int[2];
-        int val, fa;
+        public int val, fa;
         public Node(int V)
         {
             son[0] = son[1] = -1;
@@ -37,6 +37,14 @@ namespace ViS
             {
                 return son[1];
             }
+        }
+        public string toString(){
+            string ret = "";
+            ret += val.ToString() + " l=";
+            ret += l.ToString() + " r=";
+            ret += r.ToString() + " fa=";
+            ret += fa.ToString();
+            return ret;
         }
     }
 }
