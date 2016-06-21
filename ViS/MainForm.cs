@@ -33,11 +33,15 @@ namespace ViS
             geter = x => nodeLists[fa(x)].l == x ? 0 : 1;
             val = x => nodeLists[x].val;
 
+            SpaceIsDown = false;
+            MouseLeftIsDown = false;
+
             Info.Visible = false;
+
         }
-        const int Node_size = 20;
-        const int Row_size = 50; //行
-        const int Column_size = 50; //列
+        const int Node_size = 10;
+        const int Row_size = 30; //行
+        const int Column_size = 30; //列
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
         Point StartPoint = new Point(500, 100);
@@ -48,11 +52,6 @@ namespace ViS
         Bitmap BUF;
         Graphics buffer;
 
-        private void MainForm_MouseDown(object sender, MouseEventArgs e)
-        {
-            nodeSeleced = GetNodeid(e.Location);
-            DrawAll();
-        }
         private int GetNodeid(Point locate)
         {
             for (int i = 0; i < nodeCenter.Count(); i++)
@@ -213,27 +212,71 @@ namespace ViS
             root = st;
         }
 
-        private void Start_Click(object sender, EventArgs e)
+        bool SpaceIsDown;
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            Insert(5);
-            Insert(4);
-            Insert(2);
-            Insert(1);
-            Insert(3);
+            if (e.KeyCode == Keys.Space)
+                SpaceIsDown = true;
+        }
+        private void MainForm_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Space)
+                SpaceIsDown = false;
         }
 
-        private void sp_Click(object sender, EventArgs e)
+        bool MouseLeftIsDown;
+        Point MouseBeforeLocate;
+        private void MainForm_MouseDown(object sender, MouseEventArgs e)
+        {
+            nodeSeleced = GetNodeid(e.Location);
+            if (nodeSeleced == -1)
+            {
+                if (e.Button == System.Windows.Forms.MouseButtons.Left && SpaceIsDown)
+                {
+                    MouseLeftIsDown = true;
+                    MouseBeforeLocate = e.Location;
+                }
+            }
+            DrawAll();
+        }
+
+        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (MouseLeftIsDown && SpaceIsDown)
+            {
+                Size offset = (Size)e.Location - (Size)MouseBeforeLocate;
+                MouseBeforeLocate = e.Location;
+                for (int i = 0; i < nodeCenter.Count; i++)
+                {
+                    nodeCenter[i] += offset;
+                }
+            StartPoint += offset;
+            }
+            DrawAll();
+        }
+
+        private void MainForm_MouseUp(object sender, MouseEventArgs e)
+        {
+            if(e.Button == System.Windows.Forms.MouseButtons.Left)
+                MouseLeftIsDown = false;
+        }
+
+        private void SPL_Click(object sender, EventArgs e)
         {
             if (nodeSeleced == -1) return;
             Splay(nodeSeleced);
-            Info.Text = "";
-            foreach(var x in nodeLists){
-                Info.Text += x.toString() + "\n";
-            }
-            Info.Text += "ROOT = " + root.ToString();
+
             nodeCenter[root] = StartPoint;
             ChangeSubLocate(root);
             DrawAll();
+        }
+        private void Build_Click(object sender, EventArgs e)
+        {
+
+            for (int i = 1; i < 30; i++)
+            {
+                Insert(i);
+            }
         }
     }
 }
