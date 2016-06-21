@@ -20,7 +20,7 @@ namespace ViS
         {
             nodeSeleced = -1;
             nodeLists.Add(new Node(0));
-            nodeCenter.Add(new Point(100, 100));
+            nodeCenter.Add(StartPoint);
             nodeExist.Add(true);
             root = 0;
             leftOffset = new Size(-Row_size, Column_size);
@@ -32,12 +32,15 @@ namespace ViS
             fa = x => nodeLists[x].fa;
             geter = x => nodeLists[fa(x)].l == x ? 0 : 1;
             val = x => nodeLists[x].val;
+
+            Info.Visible = false;
         }
         const int Node_size = 20;
-        const int Row_size = 30; //行
-        const int Column_size = 30; //列
+        const int Row_size = 50; //行
+        const int Column_size = 50; //列
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
+        Point StartPoint = new Point(500, 100);
         List<bool> nodeExist = new List<bool>();
         int nodeSeleced;
         Size leftOffset, rightOffset;
@@ -107,20 +110,44 @@ namespace ViS
             Graphics formGraphics = this.CreateGraphics();
             formGraphics.DrawImage(BUF,new Point(0,0));
         }
-
-        private void ChangeSubLocate(int id)
+        List<int> nodeOrder;
+        private void GetSubOrder(int x)
         {
-            int l = nodeLists[id].l, r = nodeLists[id].r;
+            if (nodeLists[x].l != -1) GetSubOrder(nodeLists[x].l);
+            nodeOrder.Add(x);
+            if (nodeLists[x].r != -1) GetSubOrder(nodeLists[x].r);
+        }
+        private int getID(int x)
+        {
+            for (int i = 0; i < nodeOrder.Count; i++)
+            {
+                if (nodeOrder[i] == x)
+                    return i;
+            }
+            return -1;
+        }
+        private void ChangeNodeLocate(int st)
+        {
+            int l = nodeLists[st].l,r = nodeLists[st].r;
+            int offset;
             if (l != -1)
             {
-                nodeCenter[l] = nodeCenter[id] + leftOffset;
-                ChangeSubLocate(l);
+                offset = getID(st) - getID(l);
+                nodeCenter[l] = nodeCenter[st] + new Size(-Row_size * offset, Column_size);
+                ChangeNodeLocate(l);
             }
             if (r != -1)
             {
-                nodeCenter[r] = nodeCenter[id] + rightOffset;
-                ChangeSubLocate(r);
+                offset = getID(r) - getID(st);
+                nodeCenter[r] = nodeCenter[st] + new Size(Row_size * offset, Column_size);
+                ChangeNodeLocate(r);
             }
+        }
+        private void ChangeSubLocate(int st)
+        {
+            nodeOrder = new List<int>();
+            GetSubOrder(st);
+            ChangeNodeLocate(st);   
         }
         int root;
 
@@ -129,6 +156,9 @@ namespace ViS
         {
             int st = fa(x);
             int parent = fa(st);
+
+            if (parent != -1)
+                nodeLists[parent].son[geter(st)] = x;
 
             int d = geter(x);
 
@@ -142,8 +172,6 @@ namespace ViS
             nodeLists[x].fa = parent;
             nodeLists[st].fa = x;
 
-            if (parent != -1)
-               nodeLists[parent].son[geter(st)] = x;
         }
         public void Insert(int x)
         {
@@ -187,10 +215,11 @@ namespace ViS
 
         private void Start_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i < 10; i++)
-            {
-                Insert((i+5)%3);
-            }
+            Insert(5);
+            Insert(4);
+            Insert(2);
+            Insert(1);
+            Insert(3);
         }
 
         private void sp_Click(object sender, EventArgs e)
@@ -202,6 +231,7 @@ namespace ViS
                 Info.Text += x.toString() + "\n";
             }
             Info.Text += "ROOT = " + root.ToString();
+            nodeCenter[root] = StartPoint;
             ChangeSubLocate(root);
             DrawAll();
         }
