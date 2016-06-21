@@ -39,7 +39,7 @@ namespace ViS
             Info.Visible = false;
 
         }
-        const int Node_size = 10;
+        const int Node_size = 15;
         const int Row_size = 30; //行
         const int Column_size = 30; //列
         List<Node> nodeLists = new List<Node>();
@@ -181,7 +181,7 @@ namespace ViS
             insert(root,nodeid);
             ChangeSubLocate(root);
             DrawAll();
-          //  Splay(nodeid);
+            //Splay(nodeid);
         }
         del val;
         private void insert(int st,int locate)
@@ -266,17 +266,35 @@ namespace ViS
             if (nodeSeleced == -1) return;
             Splay(nodeSeleced);
 
-            nodeCenter[root] = StartPoint;
+         //   nodeCenter[root] = StartPoint;
             ChangeSubLocate(root);
             DrawAll();
         }
         private void Build_Click(object sender, EventArgs e)
         {
 
-            for (int i = 1; i < 30; i++)
+            for (int i = 1; i < 40; i++)
             {
                 Insert(i);
             }
+        }
+
+        private void revert_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < nodeLists.Count; i++)
+            {
+                if (nodeExist[i] == false) continue;
+                Splay(i);
+                nodeCenter[i] = StartPoint;
+                ChangeNodeLocate(i);
+                DrawAll();
+            }
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            BUF = new Bitmap(this.Width, this.Height);
+            buffer = Graphics.FromImage(BUF);
         }
     }
 }

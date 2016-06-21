@@ -28,10 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.Info = new System.Windows.Forms.Label();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.SPL = new System.Windows.Forms.ToolStripButton();
             this.Build = new System.Windows.Forms.ToolStripButton();
+            this.revert = new System.Windows.Forms.ToolStripButton();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -49,10 +51,11 @@
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.SPL,
-            this.Build});
+            this.Build,
+            this.revert});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1221, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(778, 25);
             this.toolStrip1.TabIndex = 3;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -74,11 +77,21 @@
             this.Build.Text = "Build";
             this.Build.Click += new System.EventHandler(this.Build_Click);
             // 
+            // revert
+            // 
+            this.revert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.revert.Image = ((System.Drawing.Image)(resources.GetObject("revert.Image")));
+            this.revert.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.revert.Name = "revert";
+            this.revert.Size = new System.Drawing.Size(23, 22);
+            this.revert.Text = "toolStripButton1";
+            this.revert.Click += new System.EventHandler(this.revert_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1221, 641);
+            this.ClientSize = new System.Drawing.Size(778, 416);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.Info);
             this.Name = "MainForm";
@@ -89,6 +102,7 @@
             this.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseDown);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -102,6 +116,7 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton SPL;
         private System.Windows.Forms.ToolStripButton Build;
+        private System.Windows.Forms.ToolStripButton revert;
 
     }
 }
