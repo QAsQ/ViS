@@ -266,7 +266,7 @@ namespace ViS
             if (nodeSeleced == -1) return;
             Splay(nodeSeleced);
 
-         //   nodeCenter[root] = StartPoint;
+            nodeCenter[root] = StartPoint;
             ChangeSubLocate(root);
             DrawAll();
         }
@@ -290,7 +290,6 @@ namespace ViS
                 DrawAll();
             }
         }
-
         private void MainForm_Resize(object sender, EventArgs e)
         {
             BUF = new Bitmap(this.Width, this.Height);
