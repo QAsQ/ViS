@@ -17,15 +17,15 @@ namespace ViS
         {
             InitializeComponent();
         }
+
         private void MainForm_Load(object sender, EventArgs e)
         {
             nodeSeleced = -1;
             nodeLists.Add(new Node(0));
             nodeCenter.Add(StartPoint);
             nodeExist.Add(true);
+            nodeOrder.Add(0);
             root = 0;
-            leftOffset = new Size(-Row_size, Column_size);
-            rightOffset = new Size(Row_size, Column_size);
 
             BUF = new Bitmap(this.Width, this.Height);
             buffer = Graphics.FromImage(BUF);
@@ -38,17 +38,17 @@ namespace ViS
             MouseLeftIsDown = false;
 
             Info.Visible = false;
-
         }
+
         const int Node_size = 15;
-        const int Row_size = 30; //行
-        const int Column_size = 40; //列
+        const int Row_size = 30; //水平偏移量
+        const int Column_size = 40; //垂直偏移量
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
         Point StartPoint = new Point(500, 100);
         List<bool> nodeExist = new List<bool>();
+        List<int> nodeOrder = new List<int>();
         int nodeSeleced;
-        Size leftOffset, rightOffset;
 
         Bitmap BUF;
         Graphics buffer;
@@ -62,14 +62,18 @@ namespace ViS
             }
             return -1;
         }
+
         delegate int del(int x);
         del fa;
+        del geter;
+
         private bool inNode(Point center, Point locate)
         {
             center -= (Size)locate;
             del squ = x => x*x;
             return squ(Node_size) >= squ(center.X) + squ(center.Y);
         }
+
         private void DrawNode(Point locate, Node v,Color color)
         {
             Rectangle rect = new Rectangle(locate - new Size(Node_size, Node_size)
@@ -82,15 +86,18 @@ namespace ViS
                                         ,locate.Y - wordSize.Height / 2);
             buffer.DrawString(v.val.ToString(), font, brush, startPoint);
         }
+
         private void DrawLine(Point start, Point end)
         {
             Geom.scaleLine(ref start,ref end, Node_size);
             buffer.DrawLine(new Pen(Color.Black), start, end);
         }
+
         private void DrawAll()
         {
             DrawAll(new List<int>(), new List<int>());
         }
+
         bool inList(int st, int ed,List<int> s, List<int> e)
         {
             for (int i = 0; i < s.Count; i++)
@@ -100,15 +107,7 @@ namespace ViS
             }
             return false;
         }
-        private void resetRoot(int x)
-        {
-            root = x;
-            nodeOrder = new List<int>();
-            GetSubOrder(root);
-            nodeCenter[root] = StartPoint + new Size(Row_size * getID(root), 0);
-            ChangeSubLocate(root);
-            DrawAll();
-        }
+
         private void DrawAll(List<int> st,List<int> ed)
         {
             buffer.Clear(Color.White);
@@ -133,48 +132,29 @@ namespace ViS
             Graphics formGraphics = this.CreateGraphics();
             formGraphics.DrawImage(BUF,new Point(0,0));
         }
-        List<int> nodeOrder;
-        private void GetSubOrder(int x)
-        {
-            if (nodeLists[x].l != -1) GetSubOrder(nodeLists[x].l);
-            nodeOrder.Add(x);
-            if (nodeLists[x].r != -1) GetSubOrder(nodeLists[x].r);
-        }
-        private int getID(int x)
-        {
-            for (int i = 0; i < nodeOrder.Count; i++)
-            {
-                if (nodeOrder[i] == x)
-                    return i;
-            }
-            return -1;
-        }
-        private void ChangeNodeLocate(int st)
+
+
+        private void ChangeSubLocate(int st)
         {
             int l = nodeLists[st].l,r = nodeLists[st].r;
             int offset;
             if (l != -1)
             {
-                offset = getID(st) - getID(l);
+                offset = nodeOrder[st] - nodeOrder[l];
                 nodeCenter[l] = nodeCenter[st] + new Size(-Row_size * offset, Column_size);
-                ChangeNodeLocate(l);
+                ChangeSubLocate(l);
             }
             if (r != -1)
             {
-                offset = getID(r) - getID(st);
+                offset = nodeOrder[r] - nodeOrder[st];
                 nodeCenter[r] = nodeCenter[st] + new Size(Row_size * offset, Column_size);
-                ChangeNodeLocate(r);
+                ChangeSubLocate(r);
             }
         }
-        private void ChangeSubLocate(int st)
-        {
-            nodeOrder = new List<int>();
-            GetSubOrder(st);
-            ChangeNodeLocate(st);   
-        }
+
+
         int root;
 
-        del geter;
         private void rotate(int x)
         {
             int st = fa(x);
@@ -201,21 +181,44 @@ namespace ViS
             }
             else
             {
-                resetRoot(x);
+                nodeCenter[x] = StartPoint + new Size(Row_size * nodeOrder[x], 0);
+                ChangeSubLocate(x);
             }
             Thread.Sleep(100);
             DrawAll();
         }
+
         public void Insert(int x)
         {
             nodeLists.Add(new Node(x));
             nodeExist.Add(true);
             nodeCenter.Add(new Point(0, 0));
+            nodeOrder.Add(0);
             int nodeid = nodeLists.Count - 1;
             insert(root,nodeid);
+            ChangeNodeOrder(root);
             ChangeSubLocate(root);
             DrawAll();
         }
+
+        List<int> tempNodeOrder;
+
+        private void getTempOrder(int st, ref List<int> list)
+        {
+            int l = nodeLists[st].l, r = nodeLists[st].r;
+            if (l != -1) getTempOrder(l, ref list);
+            list.Add(st);
+            if (r != -1) getTempOrder(r, ref list);
+        }
+
+        private void ChangeNodeOrder(int root)
+        {
+            tempNodeOrder = new List<int>();
+            getTempOrder(root, ref tempNodeOrder);
+            for (int i = 0; i < tempNodeOrder.Count; i++)
+                nodeOrder[tempNodeOrder[i]] = i + 1;
+        }
+
         del val;
         private void insert(int st, int locate)
         {
@@ -251,6 +254,7 @@ namespace ViS
             if (e.KeyCode == Keys.Space)
                 SpaceIsDown = true;
         }
+
         private void MainForm_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Space)
@@ -300,6 +304,7 @@ namespace ViS
             Splay(nodeSeleced);
 
         }
+
         private void Build_Click(object sender, EventArgs e)
         {
 
@@ -317,6 +322,7 @@ namespace ViS
                 Splay(i);
             }
         }
+
         private void MainForm_Resize(object sender, EventArgs e)
         {
             BUF = new Bitmap(this.Width, this.Height);
