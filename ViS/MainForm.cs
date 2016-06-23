@@ -83,9 +83,31 @@ namespace ViS
         }
         private void DrawLine(Point start, Point end)
         {
+            Geom.scaleLine(ref start,ref end, Node_size);
             buffer.DrawLine(new Pen(Color.Black), start, end);
         }
         private void DrawAll()
+        {
+            DrawAll(new List<int>(), new List<int>());
+        }
+        bool inList(int st, int ed,List<int> s, List<int> e)
+        {
+            for (int i = 0; i < s.Count; i++)
+            {
+                if (s[i] == st && e[i] == ed)
+                    return true;
+            }
+            return false;
+        }
+        private void resetRoot()
+        {
+            nodeOrder = new List<int>();
+            GetSubOrder(root);
+            nodeCenter[root] = StartPoint + new Size(Column_size * getID(root), 0);
+            ChangeSubLocate(root);
+            DrawAll();
+        }
+        private void DrawAll(List<int> st,List<int> ed)
         {
             buffer.Clear(Color.White);
             for (int i = 0; i < nodeLists.Count; i++)
@@ -93,7 +115,7 @@ namespace ViS
                 if (nodeExist[i] == false) continue;
                 for (int k = 0; k < 2; k++)
                 {
-                    if (nodeLists[i].son[k] != -1)
+                    if (nodeLists[i].son[k] != -1 && inList(i,nodeLists[i].son[k],st,ed)==false)
                     {
                         DrawLine(nodeCenter[i], nodeCenter[nodeLists[i].son[k]]);
                     }
@@ -171,6 +193,11 @@ namespace ViS
             nodeLists[x].fa = parent;
             nodeLists[st].fa = x;
 
+            if (parent != -1)
+            {
+                ChangeSubLocate(parent);
+            }
+            DrawAll();
         }
         public void Insert(int x)
         {
@@ -181,10 +208,9 @@ namespace ViS
             insert(root,nodeid);
             ChangeSubLocate(root);
             DrawAll();
-            //Splay(nodeid);
         }
         del val;
-        private void insert(int st,int locate)
+        private void insert(int st, int locate)
         {
             int d = val(st) < val(locate) ? 1 : 0;
             if (nodeLists[st].son[d] != -1) insert(nodeLists[st].son[d], locate);
@@ -210,6 +236,7 @@ namespace ViS
             }
             if (fa(st) != -1) rotate(st);
             root = st;
+            resetRoot();
         }
 
         bool SpaceIsDown;
@@ -266,14 +293,11 @@ namespace ViS
             if (nodeSeleced == -1) return;
             Splay(nodeSeleced);
 
-            nodeCenter[root] = StartPoint;
-            ChangeSubLocate(root);
-            DrawAll();
         }
         private void Build_Click(object sender, EventArgs e)
         {
 
-            for (int i = 1; i < 40; i++)
+            for (int i = 1; i < 20; i++)
             {
                 Insert(i);
             }
@@ -285,10 +309,9 @@ namespace ViS
             {
                 if (nodeExist[i] == false) continue;
                 Splay(i);
-                nodeCenter[i] = StartPoint;
-                ChangeNodeLocate(i);
-                DrawAll();
             }
+            resetRoot();
+            DrawAll();
         }
         private void MainForm_Resize(object sender, EventArgs e)
         {
