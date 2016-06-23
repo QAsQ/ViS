@@ -198,6 +198,7 @@ namespace ViS
             insert(root,nodeid);
             ChangeNodeOrder(root);
             ChangeSubLocate(root);
+            Splay(nodeid);
             DrawAll();
         }
 
@@ -328,7 +329,7 @@ namespace ViS
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i < 64; i++)
+            for (int i = 1; i < 15; i++)
             {
                 Insert(i);
             }
