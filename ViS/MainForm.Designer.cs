@@ -33,6 +33,7 @@
             this.context = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.splayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.context.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -50,10 +51,11 @@
             // 
             this.context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.splayToolStripMenuItem,
-            this.buildToolStripMenuItem});
+            this.buildToolStripMenuItem,
+            this.insertToolStripMenuItem});
             this.context.Name = "context";
             this.context.ShowImageMargin = false;
-            this.context.Size = new System.Drawing.Size(128, 70);
+            this.context.Size = new System.Drawing.Size(128, 92);
             // 
             // splayToolStripMenuItem
             // 
@@ -68,6 +70,13 @@
             this.buildToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
             this.buildToolStripMenuItem.Text = "Build";
             this.buildToolStripMenuItem.Click += new System.EventHandler(this.buildToolStripMenuItem_Click);
+            // 
+            // insertToolStripMenuItem
+            // 
+            this.insertToolStripMenuItem.Name = "insertToolStripMenuItem";
+            this.insertToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.insertToolStripMenuItem.Text = "Insert";
+            this.insertToolStripMenuItem.Click += new System.EventHandler(this.insertToolStripMenuItem_Click);
             // 
             // MainForm
             // 
@@ -96,6 +105,7 @@
         private System.Windows.Forms.ContextMenuStrip context;
         private System.Windows.Forms.ToolStripMenuItem splayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem insertToolStripMenuItem;
 
     }
 }

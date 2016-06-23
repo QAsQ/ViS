@@ -333,5 +333,11 @@ namespace ViS
                 Insert(i);
             }
         }
+        private void insertToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ValueGetForm valueGeter = new ValueGetForm();
+            valueGeter.ShowDialog();
+            Insert(valueGeter.valer);
+        }
     }
 }

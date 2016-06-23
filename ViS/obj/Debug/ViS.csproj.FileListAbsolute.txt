@@ -7,3 +7,4 @@ F:\code\cSharp\ViS\ViS\obj\Debug\ViS.Properties.Resources.resources
 F:\code\cSharp\ViS\ViS\obj\Debug\ViS.csproj.GenerateResource.Cache
 F:\code\cSharp\ViS\ViS\obj\Debug\ViS.exe
 F:\code\cSharp\ViS\ViS\obj\Debug\ViS.pdb
+F:\code\cSharp\ViS\ViS\obj\Debug\ViS.ValueGetForm.resources
