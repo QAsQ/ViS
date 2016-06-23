@@ -28,13 +28,12 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
+            this.components = new System.ComponentModel.Container();
             this.Info = new System.Windows.Forms.Label();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.SPL = new System.Windows.Forms.ToolStripButton();
-            this.Build = new System.Windows.Forms.ToolStripButton();
-            this.revert = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip1.SuspendLayout();
+            this.context = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.splayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.context.SuspendLayout();
             this.SuspendLayout();
             // 
             // Info
@@ -47,52 +46,34 @@
             this.Info.TabIndex = 2;
             this.Info.Text = "label1";
             // 
-            // toolStrip1
+            // context
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.SPL,
-            this.Build,
-            this.revert});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(1446, 25);
-            this.toolStrip1.TabIndex = 3;
-            this.toolStrip1.Text = "toolStrip1";
+            this.context.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.splayToolStripMenuItem,
+            this.buildToolStripMenuItem});
+            this.context.Name = "context";
+            this.context.ShowImageMargin = false;
+            this.context.Size = new System.Drawing.Size(128, 70);
             // 
-            // SPL
+            // splayToolStripMenuItem
             // 
-            this.SPL.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.SPL.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.SPL.Name = "SPL";
-            this.SPL.Size = new System.Drawing.Size(23, 22);
-            this.SPL.Text = "Splay";
-            this.SPL.Click += new System.EventHandler(this.SPL_Click);
+            this.splayToolStripMenuItem.Name = "splayToolStripMenuItem";
+            this.splayToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.splayToolStripMenuItem.Text = "Splay";
+            this.splayToolStripMenuItem.Click += new System.EventHandler(this.splayToolStripMenuItem_Click);
             // 
-            // Build
+            // buildToolStripMenuItem
             // 
-            this.Build.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.Build.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.Build.Name = "Build";
-            this.Build.Size = new System.Drawing.Size(23, 22);
-            this.Build.Text = "Build";
-            this.Build.Click += new System.EventHandler(this.Build_Click);
-            // 
-            // revert
-            // 
-            this.revert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.revert.Image = ((System.Drawing.Image)(resources.GetObject("revert.Image")));
-            this.revert.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.revert.Name = "revert";
-            this.revert.Size = new System.Drawing.Size(23, 22);
-            this.revert.Text = "toolStripButton1";
-            this.revert.Click += new System.EventHandler(this.revert_Click);
+            this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
+            this.buildToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.buildToolStripMenuItem.Text = "Build";
+            this.buildToolStripMenuItem.Click += new System.EventHandler(this.buildToolStripMenuItem_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1446, 541);
-            this.Controls.Add(this.toolStrip1);
+            this.ClientSize = new System.Drawing.Size(1369, 618);
             this.Controls.Add(this.Info);
             this.Name = "MainForm";
             this.Text = "ViS";
@@ -103,8 +84,7 @@
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseMove);
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.context.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,10 +93,9 @@
         #endregion
 
         private System.Windows.Forms.Label Info;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton SPL;
-        private System.Windows.Forms.ToolStripButton Build;
-        private System.Windows.Forms.ToolStripButton revert;
+        private System.Windows.Forms.ContextMenuStrip context;
+        private System.Windows.Forms.ToolStripMenuItem splayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem buildToolStripMenuItem;
 
     }
 }

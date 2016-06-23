@@ -265,16 +265,24 @@ namespace ViS
         Point MouseBeforeLocate;
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
         {
-            nodeSeleced = GetNodeid(e.Location);
-            if (nodeSeleced == -1)
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
             {
-                if (e.Button == System.Windows.Forms.MouseButtons.Left && SpaceIsDown)
+                nodeSeleced = GetNodeid(e.Location);
+                if (nodeSeleced == -1)
                 {
-                    MouseLeftIsDown = true;
-                    MouseBeforeLocate = e.Location;
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left && SpaceIsDown)
+                    {
+                        MouseLeftIsDown = true;
+                        MouseBeforeLocate = e.Location;
+                    }
                 }
+                DrawAll();
             }
-            DrawAll();
+            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                context.Items[0].Visible = nodeSeleced != -1;
+                context.Show(e.Location + (Size)this.Location + new Size(9,30));
+            }
         }
 
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
@@ -298,22 +306,6 @@ namespace ViS
                 MouseLeftIsDown = false;
         }
 
-        private void SPL_Click(object sender, EventArgs e)
-        {
-            if (nodeSeleced == -1) return;
-            Splay(nodeSeleced);
-
-        }
-
-        private void Build_Click(object sender, EventArgs e)
-        {
-
-            for (int i = 1; i < 64; i++)
-            {
-                Insert(i);
-            }
-        }
-
         private void revert_Click(object sender, EventArgs e)
         {
             for (int i = 0; i < nodeLists.Count; i++)
@@ -327,6 +319,19 @@ namespace ViS
         {
             BUF = new Bitmap(this.Width, this.Height);
             buffer = Graphics.FromImage(BUF);
+        }
+
+        private void splayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Splay(nodeSeleced);
+        }
+
+        private void buildToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            for (int i = 1; i < 64; i++)
+            {
+                Insert(i);
+            }
         }
     }
 }
