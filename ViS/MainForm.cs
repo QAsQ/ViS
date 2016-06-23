@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace ViS
 {
@@ -41,7 +42,7 @@ namespace ViS
         }
         const int Node_size = 15;
         const int Row_size = 30; //行
-        const int Column_size = 30; //列
+        const int Column_size = 40; //列
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
         Point StartPoint = new Point(500, 100);
@@ -99,11 +100,12 @@ namespace ViS
             }
             return false;
         }
-        private void resetRoot()
+        private void resetRoot(int x)
         {
+            root = x;
             nodeOrder = new List<int>();
             GetSubOrder(root);
-            nodeCenter[root] = StartPoint + new Size(Column_size * getID(root), 0);
+            nodeCenter[root] = StartPoint + new Size(Row_size * getID(root), 0);
             ChangeSubLocate(root);
             DrawAll();
         }
@@ -197,6 +199,11 @@ namespace ViS
             {
                 ChangeSubLocate(parent);
             }
+            else
+            {
+                resetRoot(x);
+            }
+            Thread.Sleep(100);
             DrawAll();
         }
         public void Insert(int x)
@@ -236,7 +243,6 @@ namespace ViS
             }
             if (fa(st) != -1) rotate(st);
             root = st;
-            resetRoot();
         }
 
         bool SpaceIsDown;
@@ -297,7 +303,7 @@ namespace ViS
         private void Build_Click(object sender, EventArgs e)
         {
 
-            for (int i = 1; i < 20; i++)
+            for (int i = 1; i < 64; i++)
             {
                 Insert(i);
             }
@@ -310,8 +316,6 @@ namespace ViS
                 if (nodeExist[i] == false) continue;
                 Splay(i);
             }
-            resetRoot();
-            DrawAll();
         }
         private void MainForm_Resize(object sender, EventArgs e)
         {
