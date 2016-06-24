@@ -29,6 +29,7 @@ namespace ViS
 
             BUF = new Bitmap(this.Width, this.Height);
             buffer = Graphics.FromImage(BUF);
+            formGraphics =  this.CreateGraphics();
 
             fa = x => nodeLists[x].fa;
             geter = x => nodeLists[fa(x)].l == x ? 0 : 1;
@@ -40,18 +41,21 @@ namespace ViS
             Info.Visible = false;
         }
 
-        const int Node_size = 15;
-        const int Row_size = 50; ///` 水平偏移量
-        const int Column_size = 40; ///垂直偏移量
+        const int Node_size = 20;
+        const int Row_size = 50; /// 水平偏移量
+        const int Column_size = 50; ///垂直偏移量
+                                    ///
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
         Point StartPoint = new Point(500, 100);
         List<bool> nodeExist = new List<bool>();
         List<int> nodeOrder = new List<int>();
+
         int nodeSeleced;
 
         Bitmap BUF;
         Graphics buffer;
+        Graphics formGraphics;
 
         private int GetNodeid(Point locate)
         {
@@ -79,23 +83,23 @@ namespace ViS
             Rectangle rect = new Rectangle(locate - new Size(Node_size, Node_size)
                                            ,new Size(Node_size * 2, Node_size * 2));
             buffer.DrawEllipse(new Pen(color), rect);
-            Font font = new Font("微软雅黑", 11);
-            Brush brush = new SolidBrush(Color.Black);
+            Font font = new Font("微软雅黑",18);
+            Brush brush = new SolidBrush(color);
             Size wordSize = buffer.MeasureString(v.val.ToString(),font).ToSize();
             Point startPoint = new Point(locate.X - wordSize.Width / 2
                                         ,locate.Y - wordSize.Height / 2);
             buffer.DrawString(v.val.ToString(), font, brush, startPoint);
         }
 
-        private void DrawLine(Point start, Point end)
+        private void DrawLine(Point start, Point end,Color color)
         {
             Geom.scaleLine(ref start,ref end, Node_size);
-            buffer.DrawLine(new Pen(Color.Black), start, end);
+            buffer.DrawLine(new Pen(color), start, end);
         }
 
         private void DrawAll()
         {
-            DrawAll(new List<int>(), new List<int>());
+            DrawAll(new List<int>(), new List<int>(), new List<Point>(), new List<Point>());
         }
 
         bool inList(int st, int ed,List<int> s, List<int> e)
@@ -107,8 +111,11 @@ namespace ViS
             }
             return false;
         }
-
-        private void DrawAll(List<int> st,List<int> ed)
+        Color initNode_color =  Color.Green;
+        Color selectNode_color = Color.Blue;
+        Color initLine_color = Color.Gray;
+        Color MoveLine_color =   Color.Black;
+        private void DrawAll(List<int> st, List<int> ed, List<Point> ns, List<Point> ne)
         {
             buffer.Clear(Color.White);
             for (int i = 0; i < nodeLists.Count; i++)
@@ -116,21 +123,24 @@ namespace ViS
                 if (nodeExist[i] == false) continue;
                 for (int k = 0; k < 2; k++)
                 {
-                    if (nodeLists[i].son[k] != -1 && inList(i,nodeLists[i].son[k],st,ed)==false)
+                    if (nodeLists[i].son[k] != -1 && inList(i, nodeLists[i].son[k], st, ed) == false)
                     {
-                        DrawLine(nodeCenter[i], nodeCenter[nodeLists[i].son[k]]);
+                        DrawLine(nodeCenter[i], nodeCenter[nodeLists[i].son[k]], initLine_color);
                     }
                 }
             }
             for (int i = 0; i < nodeLists.Count; i++)
             {
                 if (nodeExist[i] == false) continue;
-                DrawNode(nodeCenter[i], nodeLists[i],Color.Black);
+                DrawNode(nodeCenter[i], nodeLists[i], initNode_color);
             }
-            if (nodeSeleced != -1) 
-                DrawNode(nodeCenter[nodeSeleced], nodeLists[nodeSeleced], Color.Red);
-            Graphics formGraphics = this.CreateGraphics();
-            formGraphics.DrawImage(BUF,new Point(0,0));
+            if (nodeSeleced != -1)
+                DrawNode(nodeCenter[nodeSeleced], nodeLists[nodeSeleced], selectNode_color);
+            for (int i = 0; i < ns.Count; i++)
+            {
+                DrawLine(ns[i], ne[i], MoveLine_color);
+            }
+            formGraphics.DrawImage(BUF, new Point(0, 0));
         }
 
 
@@ -154,36 +164,70 @@ namespace ViS
 
 
         int root;
+        const int Tran = 20; 
+        const int Mov = 20;
 
         private void rotate(int x)
         {
             int st = fa(x);
             int parent = fa(st);
-
-            nodeCenter[x] += new Size(0,-Column_size);
-            ChangeSubLocate(x);
-            DrawAll();
-            Thread.Sleep(1000);
-
-            if (parent != -1)
-                nodeLists[parent].son[geter(st)] = x;
-
             int d = geter(x);
-
             int dson = nodeLists[x].son[d ^ 1];
-            if(dson!=-1)
-                nodeLists[dson].fa = st;
+
+            Point pris = nodeCenter[x];
+            for (int i = 1; i <= Tran; i++)
+            {
+                nodeCenter[x] = pris + new Size(0, -Column_size * i / Tran);
+                ChangeSubLocate(x);
+                DrawAll();
+            }
+
+            List<int> from, to;
+            from = new List<int>(); 
+            to = new List<int>();
+
+            from.Add(parent);to.Add(st);
+            from.Add(x);to.Add(dson);
+
+            int offset = (nodeOrder[st] - nodeOrder[x] ) * Row_size / Mov;
+
+            for (int i = 1; i <= Mov; i++)
+            {
+                List<Point> ns = new List<Point>();
+                List<Point> ne = new List<Point>();
+                if (parent != -1)
+                {
+                    ns.Add(nodeCenter[parent]);
+                    ne.Add(nodeCenter[st] - new Size(offset * i, 0));
+                }
+                if (dson != -1)
+                {
+                    ns.Add(nodeCenter[dson]);
+                    ne.Add(nodeCenter[x] + new Size(offset * i, 0));
+                }
+                DrawAll(from,to,ns,ne);
+            }
+
+            //---rotate_Start---
+            if (parent != -1) nodeLists[parent].son[geter(st)] = x; 
+
+            if (dson != -1) nodeLists[dson].fa = st;
 
             nodeLists[st].son[d] = dson;
             nodeLists[x].son[d^1] = st;
 
             nodeLists[x].fa = parent;
             nodeLists[st].fa = x;
+            //----rotate_End---
 
-            nodeCenter[st] += new Size(0, Column_size);
-            ChangeSubLocate(st);
-            DrawAll();
-            Thread.Sleep(1000);
+
+            pris = nodeCenter[st];
+            for (int i = 0; i <= Tran; i++)
+            {
+                nodeCenter[st] = pris + new Size(0, Column_size * i/ Tran);
+                ChangeSubLocate(st);
+                DrawAll();
+            }
         }
 
         public void Insert(int x)
@@ -318,6 +362,7 @@ namespace ViS
         {
             BUF = new Bitmap(this.Width, this.Height);
             buffer = Graphics.FromImage(BUF);
+            formGraphics = this.CreateGraphics();
         }
 
         private void splayToolStripMenuItem_Click(object sender, EventArgs e)
@@ -327,7 +372,7 @@ namespace ViS
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i < 31; i++)
+            for (int i = 1; i < 15; i++)
             {
                 Insert(i);
             }
@@ -337,6 +382,10 @@ namespace ViS
             ValueGetForm valueGeter = new ValueGetForm();
             valueGeter.ShowDialog();
             Insert(valueGeter.valer);
+        }
+        private void infoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Creater QAsQ\nLook at https://github.com/QAsQ/ViS");
         }
     }
 }

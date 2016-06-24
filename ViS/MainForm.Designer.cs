@@ -34,7 +34,10 @@
             this.splayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.buildToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.Menu = new System.Windows.Forms.MenuStrip();
+            this.infoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.context.SuspendLayout();
+            this.Menu.SuspendLayout();
             this.SuspendLayout();
             // 
             // Info
@@ -78,12 +81,31 @@
             this.insertToolStripMenuItem.Text = "Insert";
             this.insertToolStripMenuItem.Click += new System.EventHandler(this.insertToolStripMenuItem_Click);
             // 
+            // Menu
+            // 
+            this.Menu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.infoToolStripMenuItem});
+            this.Menu.Location = new System.Drawing.Point(0, 0);
+            this.Menu.Name = "Menu";
+            this.Menu.Size = new System.Drawing.Size(530, 25);
+            this.Menu.TabIndex = 3;
+            this.Menu.Text = "menuStrip1";
+            // 
+            // infoToolStripMenuItem
+            // 
+            this.infoToolStripMenuItem.Name = "infoToolStripMenuItem";
+            this.infoToolStripMenuItem.Size = new System.Drawing.Size(43, 21);
+            this.infoToolStripMenuItem.Text = "Info";
+            this.infoToolStripMenuItem.Click += new System.EventHandler(this.infoToolStripMenuItem_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(518, 406);
+            this.ClientSize = new System.Drawing.Size(530, 392);
+            this.Controls.Add(this.Menu);
             this.Controls.Add(this.Info);
+            this.MainMenuStrip = this.Menu;
             this.Name = "MainForm";
             this.Text = "ViS";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -94,6 +116,8 @@
             this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.context.ResumeLayout(false);
+            this.Menu.ResumeLayout(false);
+            this.Menu.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -106,6 +130,8 @@
         private System.Windows.Forms.ToolStripMenuItem splayToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem buildToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem insertToolStripMenuItem;
+        private System.Windows.Forms.MenuStrip Menu;
+        private System.Windows.Forms.ToolStripMenuItem infoToolStripMenuItem;
 
     }
 }
