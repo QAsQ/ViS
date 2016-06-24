@@ -41,8 +41,8 @@ namespace ViS
         }
 
         const int Node_size = 15;
-        const int Row_size = 30; //水平偏移量
-        const int Column_size = 40; //垂直偏移量
+        const int Row_size = 50; ///` 水平偏移量
+        const int Column_size = 40; ///垂直偏移量
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
         Point StartPoint = new Point(500, 100);
@@ -160,6 +160,11 @@ namespace ViS
             int st = fa(x);
             int parent = fa(st);
 
+            nodeCenter[x] += new Size(0,-Column_size);
+            ChangeSubLocate(x);
+            DrawAll();
+            Thread.Sleep(1000);
+
             if (parent != -1)
                 nodeLists[parent].son[geter(st)] = x;
 
@@ -175,17 +180,10 @@ namespace ViS
             nodeLists[x].fa = parent;
             nodeLists[st].fa = x;
 
-            if (parent != -1)
-            {
-                ChangeSubLocate(parent);
-            }
-            else
-            {
-                nodeCenter[x] = StartPoint + new Size(Row_size * nodeOrder[x], 0);
-                ChangeSubLocate(x);
-            }
-            Thread.Sleep(100);
+            nodeCenter[st] += new Size(0, Column_size);
+            ChangeSubLocate(st);
             DrawAll();
+            Thread.Sleep(1000);
         }
 
         public void Insert(int x)
@@ -198,7 +196,7 @@ namespace ViS
             insert(root,nodeid);
             ChangeNodeOrder(root);
             ChangeSubLocate(root);
-            Splay(nodeid);
+           // Splay(nodeid);
             DrawAll();
         }
 
@@ -329,7 +327,7 @@ namespace ViS
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i < 15; i++)
+            for (int i = 1; i < 31; i++)
             {
                 Insert(i);
             }

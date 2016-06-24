@@ -55,26 +55,26 @@
             this.insertToolStripMenuItem});
             this.context.Name = "context";
             this.context.ShowImageMargin = false;
-            this.context.Size = new System.Drawing.Size(128, 92);
+            this.context.Size = new System.Drawing.Size(85, 70);
             // 
             // splayToolStripMenuItem
             // 
             this.splayToolStripMenuItem.Name = "splayToolStripMenuItem";
-            this.splayToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.splayToolStripMenuItem.Size = new System.Drawing.Size(84, 22);
             this.splayToolStripMenuItem.Text = "Splay";
             this.splayToolStripMenuItem.Click += new System.EventHandler(this.splayToolStripMenuItem_Click);
             // 
             // buildToolStripMenuItem
             // 
             this.buildToolStripMenuItem.Name = "buildToolStripMenuItem";
-            this.buildToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.buildToolStripMenuItem.Size = new System.Drawing.Size(84, 22);
             this.buildToolStripMenuItem.Text = "Build";
             this.buildToolStripMenuItem.Click += new System.EventHandler(this.buildToolStripMenuItem_Click);
             // 
             // insertToolStripMenuItem
             // 
             this.insertToolStripMenuItem.Name = "insertToolStripMenuItem";
-            this.insertToolStripMenuItem.Size = new System.Drawing.Size(127, 22);
+            this.insertToolStripMenuItem.Size = new System.Drawing.Size(84, 22);
             this.insertToolStripMenuItem.Text = "Insert";
             this.insertToolStripMenuItem.Click += new System.EventHandler(this.insertToolStripMenuItem_Click);
             // 
@@ -82,7 +82,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1369, 618);
+            this.ClientSize = new System.Drawing.Size(518, 406);
             this.Controls.Add(this.Info);
             this.Name = "MainForm";
             this.Text = "ViS";
