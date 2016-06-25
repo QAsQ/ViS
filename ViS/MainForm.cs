@@ -35,7 +35,6 @@ namespace ViS
             geter = x => nodeLists[fa(x)].l == x ? 0 : 1;
             val = x => nodeLists[x].val;
 
-            SpaceIsDown = false;
             MouseLeftIsDown = false;
 
             Info.Visible = false;
@@ -44,10 +43,9 @@ namespace ViS
         const int Node_size = 20;
         const int Row_size = 50; /// 水平偏移量
         const int Column_size = 50; ///垂直偏移量
-                                    ///
         List<Node> nodeLists = new List<Node>();
         List<Point> nodeCenter = new List<Point>();
-        Point StartPoint = new Point(500, 100);
+        Point StartPoint = new Point(100, 100);
         List<bool> nodeExist = new List<bool>();
         List<int> nodeOrder = new List<int>();
 
@@ -164,8 +162,8 @@ namespace ViS
 
 
         int root;
-        const int Tran = 20; 
-        const int Mov = 20;
+        int Tran = 5; 
+        int Mov = 5;
 
         private void rotate(int x)
         {
@@ -173,7 +171,6 @@ namespace ViS
             int parent = fa(st);
             int d = geter(x);
             int dson = nodeLists[x].son[d ^ 1];
-
             Point pris = nodeCenter[x];
             for (int i = 1; i <= Tran; i++)
             {
@@ -290,20 +287,6 @@ namespace ViS
             if (fa(st) != -1) rotate(st);
             root = st;
         }
-
-        bool SpaceIsDown;
-        private void MainForm_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Space)
-                SpaceIsDown = true;
-        }
-
-        private void MainForm_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Space)
-                SpaceIsDown = false;
-        }
-
         bool MouseLeftIsDown;
         Point MouseBeforeLocate;
         private void MainForm_MouseDown(object sender, MouseEventArgs e)
@@ -313,7 +296,7 @@ namespace ViS
                 nodeSeleced = GetNodeid(e.Location);
                 if (nodeSeleced == -1)
                 {
-                    if (e.Button == System.Windows.Forms.MouseButtons.Left && SpaceIsDown)
+                    if (e.Button == System.Windows.Forms.MouseButtons.Left)
                     {
                         MouseLeftIsDown = true;
                         MouseBeforeLocate = e.Location;
@@ -330,7 +313,7 @@ namespace ViS
 
         private void MainForm_MouseMove(object sender, MouseEventArgs e)
         {
-            if (MouseLeftIsDown && SpaceIsDown)
+            if (MouseLeftIsDown)
             {
                 Size offset = (Size)e.Location - (Size)MouseBeforeLocate;
                 MouseBeforeLocate = e.Location;
@@ -372,7 +355,7 @@ namespace ViS
 
         private void buildToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            for (int i = 1; i < 15; i++)
+            for (int i = 1; i < 32; i++)
             {
                 Insert(i);
             }
@@ -386,6 +369,13 @@ namespace ViS
         private void infoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Creater QAsQ\nLook at https://github.com/QAsQ/ViS");
+        }
+
+        private void MainForm_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            int id = GetNodeid(e.Location);
+            if (id != -1)
+                Splay(id);
         }
     }
 }
